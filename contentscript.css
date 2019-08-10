@@ -1,0 +1,22 @@
+.selection_bubble {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: #00b4b4;
+}
+
+.selection_bubble:hover{
+    cursor: pointer;
+    background-color: aqua;
+}
+
+.inner_bubble{
+    width:19px;
+    height:19px;
+    background-size:19px;
+    /*需要在manifest里加上web_accessible_resources，否则会报错!!!*/
+    background-image:url('chrome-extension://__MSG_@@extension_id__/icon/ava.png');
+}

@@ -1,0 +1,26 @@
+{
+	"name": "AVA",
+	"version": "0.1",
+	"description": "AVA Tool",
+	"manifest_version": 2,
+	"browser_action": {
+		"default_title": "Selected Text",
+		"default_icon": "icon/ava.png"
+	},
+	"permissions": [
+		"tabs",
+		"<all_urls>"
+	],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["jquery-1.8.3.min.js","contentscript.js"],
+			"css": ["contentscript.css"],
+			"run_at": "document_end",
+			"all_frames": true
+		}
+	],
+	"web_accessible_resources": [
+		"icon/ava.png"
+	]
+}
