@@ -1,10 +1,10 @@
 {
 	"name": "AVA",
 	"version": "0.1",
-	"description": "AVA Tool",
+	"description": "AVA Grab Word Tool",
 	"manifest_version": 2,
 	"browser_action": {
-		"default_title": "Selected Text",
+		"default_title": "AVA",
 		"default_icon": "icon/ava.png"
 	},
 	"permissions": [
