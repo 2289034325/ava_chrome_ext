@@ -1,66 +1,50 @@
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+};
+
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    if(msg.opt == 'search'){
-        let token = localStorage.getItem('token');
-        let lang = localStorage.getItem('lang');
-        let form = msg.content;
+        if(msg.opt == 'search'){
+            let token = localStorage.getItem('token');
+            var lang = localStorage.getItem('lang');
+            if(!lang){lang = 1;}
+            let form = msg.body.form;
 
-        $.ajax({
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            type: 'get',
-            url: `http://localhost:9100/dictionary/word/search/?lang=${lang}&&form=${form}`,
-            success: function (data,textStatus) {
-                sendResponse(data);
-            },
-        });
-        return true;
-    }
-    else if(msg.opt == 'kaptcha'){
-        $.get("http://localhost:9100/kaptcha/",{},function(res){
-            let ticket = res.ticket;
-            let img = res.img;
+            $.ajax({
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                type: 'get',
+                url: `http://localhost:9100/dictionary/word/search/?lang=${lang}&&form=${form}`,
+                complete: function(xhr) {
+                    var response = {};
+                    response.status = xhr.status;
+                    response.responseText = xhr.responseText;
+                    if(xhr.status != 200){
+                        //xhr 无法直接传出去，传出去后，结构就会被简化，ResponseHeader会被丢掉!!!
+                        //这里把想要传出去的信息重新构造
+                        var err = xhr.getResponseHeader('msg-content')
+                        if (err) {
+                            err = decodeURI(err);
+                        } else {
+                            err = '发生错误，请重新尝试';
+                        }
+                        response.err = err;
+                    }
 
-            localStorage.setItem('ticket',ticket);
-            sendResponse(img);
+                    let token = localStorage.getItem('token')||'';
+                    var user = {};
+                    if(token) {
+                        user = parseJwt(token);
+                    }
+                    sendResponse({user:user,response:response});
+                }
             });
-        return true;
-    }
-    else if(msg.opt == 'login'){
-        let ticket = localStorage.getItem('ticket');
-        let vcode = msg.body.vcode;
-        let username = msg.body.username;
-        let password = msg.body.password;
-        let param = JSON.stringify({username:username,password:password});
-
-        $.ajax({
-            type: 'post',
-            url: `http://localhost:9100/auth/login/${ticket}/${vcode}`,
-            data: param,
-            contentType : 'application/json',
-            // dataType: 'json',
-            // success: function (data,textStatus,xhr) {
-            //     console.log(data,textStatus,xhr);
-            //     sendResponse(data);
-            // },
-            complete: function(xhr, textStatus) {
-                console.log(xhr.getResponseHeader('msg-content'));
-                var res = {};
-                if(xhr.status != 200)
-                {
-                    let msg = decodeURI(xhr.getResponseHeader('msg-content'));
-                    res = {success:false,msg:msg};
-                }
-                else{
-                    res = {success:true}
-                }
-                sendResponse(res);
-            }
-        });
-        return true;
-    }
-    else if(msg.opt == 'set_lang'){
-        localStorage.setItem('lang',msg.content);
-        sendResponse({});
-    }
+            return true;
+        }
 });

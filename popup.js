@@ -8,6 +8,7 @@ $(function(){
         $('#sp_user_name').text('Hi '+user.username);
         $('#div_settings').css('display','');
         $('#div_login').css('display','none');
+
     }
     else{
         $('#sp_user_name').text('未登录');
@@ -17,13 +18,22 @@ $(function(){
         refreshVCode();
     }
 
+    // 初始化语言下拉框（不管是否登录，都初始化）
+    initLangSelect();
+
+    $('#sel_lang').change(function(e){
+        let lang = $('#sel_lang').val();
+        localStorage.setItem('lang',lang);
+    });
+
     $('#img_vcode').click(function(){
         refreshVCode();
     });
 
-    $('#btn_login').click(function(){
+    $('#btn_reLogin').click(function(){
         $('#div_settings').css('display','none');
         $('#div_login').css('display','');
+        refreshVCode();
     });
 
     $('#btn_login').click(function(){
@@ -41,7 +51,7 @@ $(function(){
             // dataType没有用!!!
             // dataType: 'json',
             complete: function(xhr, textStatus) {
-                console.log(xhr);
+
                 if(xhr.status != 200)
                 {
                     let msg = decodeURI(xhr.getResponseHeader('msg-content'));
@@ -62,24 +72,34 @@ $(function(){
         });
     });
 
-    chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-        if(msg.opt == 'search'){
-            let token = localStorage.getItem('token');
-            let lang = localStorage.getItem('lang');
-            let form = msg.content;
-
-            $.ajax({
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                type: 'get',
-                url: `http://localhost:9100/dictionary/word/search/?lang=${lang}&&form=${form}`,
-                success: function (data,textStatus) {
-                    sendResponse(data);
-                },
-            });
-            return true;
-        }});
+    // listner 不能放在这里，因为popup页面一旦不显示，相关的js就不再运行，就无法监听到message!!!
+    // 需要放到background js
+    // chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    //     if(msg.opt == 'search'){
+    //         let token = localStorage.getItem('token');
+    //         var lang = localStorage.getItem('lang');
+    //         if(!lang){lang = 1;}
+    //         let form = msg.body.form;
+    //
+    //         $.ajax({
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             },
+    //             type: 'get',
+    //             url: `http://localhost:9100/dictionary/word/search/?lang=${lang}&&form=${form}`,
+    //             complete: function(xhr) {
+    //                 console.log(xhr);
+    //                 let token = localStorage.getItem('token')||'';
+    //                 var user = {};
+    //                 if(token) {
+    //                     user = parseJwt(token);
+    //                 }
+    //                 //xhr 无法直接传出去，传出去后，结构就会被简化，丢掉大部分信息!!!
+    //                 sendResponse({user:user,response:xhr});
+    //             }
+    //         });
+    //         return true;
+    //     }});
 });
 
 function parseJwt (token) {
@@ -101,4 +121,14 @@ function refreshVCode(){
         $('#img_vcode').attr('src','data:image/jpg;base64,'+img);
         // sendResponse(img);
     });
+}
+function initLangSelect(){
+    var lang = localStorage.getItem('lang');
+    if(!lang)
+    {
+        //默认English
+        lang = 1;
+    }
+
+    $('#sel_lang').val(lang);
 }
