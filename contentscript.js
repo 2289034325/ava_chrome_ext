@@ -49,6 +49,21 @@ bubbleDOM.onclick = function (e) {
                 $('#sp_spell').text(word.spell);
                 $('#sp_pronounce').text('['+word.pronounce+']');
                 $('#sp_meaning').text(word.meaning);
+
+                //如果该词没有ID，说明是简易结果，后台正在爬取例句信息
+                if(!word.id){
+                    $('#sp_spell').css('border-style','dashed');
+                    $('#sp_spell').css('border-width','thin');
+                    $('#sp_spell').css('border-color','gray');
+                    $('#sp_spell').css('color','gray');
+                }
+                else{
+
+                    $('#sp_spell').css('border-style','');
+                    $('#sp_spell').css('border-width','');
+                    $('#sp_spell').css('border-color','');
+                    $('#sp_spell').css('color','');
+                }
             }
             // }
 
