@@ -3,7 +3,7 @@ var bubbleDOM = $('<div class="selection_bubble"><div class="inner_bubble"></div
 document.body.appendChild(bubbleDOM);
 
 var wordPanelDOM = $(`
-<div id="div_word" style="visibility: hidden;position:absolute;background-color:white;padding:5px;white;box-shadow: rgba(83,84,86,0.85) 0px 1px 3px;">
+<div id="div_word" style="visibility: hidden;position:absolute;background-color:white;padding:5px;white;box-shadow: rgba(83,84,86,0.85) 0px 1px 3px;z-index: 2147483647;">
     <span id="sp_error" style="font-size:12px;"></span>
     <span id="sp_spell" style="font-size:18px;"></span> <span id="sp_pronounce" style="font-size:12px;"></span>
     <br/>
