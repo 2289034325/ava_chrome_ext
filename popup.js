@@ -113,7 +113,7 @@ function parseJwt (token) {
 };
 
 function refreshVCode(){
-    $.get("http://localhost:9100/kaptcha/",{},function(res){
+    $.get(api_host+"/kaptcha/",{},function(res){
         let ticket = res.ticket;
         let img = res.img;
 

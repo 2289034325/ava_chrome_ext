@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
                     Authorization: `Bearer ${token}`
                 },
                 type: 'get',
-                url: `http://localhost:9100/dictionary/word/search/?lang=${lang}&&form=${form}`,
+                url: `${api_host}/dictionary/word/search/?lang=${lang}&&form=${form}`,
                 complete: function(xhr) {
                     var response = {};
                     response.status = xhr.status;
