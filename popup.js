@@ -45,7 +45,7 @@ $(function(){
 
         $.ajax({
             type: 'post',
-            url: `http://localhost:9100/auth/login/${ticket}/${vcode}`,
+            url: `${api_host}/auth/login/${ticket}/${vcode}`,
             data: param,
             contentType : 'application/json',
             // dataType没有用!!!
