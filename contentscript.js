@@ -44,7 +44,7 @@ bubbleDOM.onclick = function (e) {
             // else{
             $('#sp_error').text('');
             if(response.responseText) {
-                let word = JSON.parse(response.responseText);
+                let word = JSON.parse(response.responseText).word;
                 //显示单词发音和意思
                 $('#sp_spell').text(word.spell);
                 $('#sp_pronounce').text('['+word.pronounce+']');
