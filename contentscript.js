@@ -89,6 +89,9 @@ wordPanelDOM.onmousedown = function (e) {
 document.addEventListener('mouseup', function (e) {
     // console.log(window.scrollY);
     var selection = window.getSelection();
+    if(selection.rangeCount == 0){
+        return
+    }
     var text = selection.toString();
     var oRange = selection.getRangeAt(0);
     var oRect = oRange.getBoundingClientRect();
