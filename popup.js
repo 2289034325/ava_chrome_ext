@@ -58,10 +58,11 @@ $(function(){
                     $('#login_msg').text(msg);
                 }
                 else{
-                    let res = JSON.parse(xhr.responseText);
-                    localStorage.setItem('token',res.token);
+                    let token = xhr.responseText;
+                    localStorage.setItem('token',token);
+                    let user = parseJwt(token);
 
-                    $('#sp_user_name').text('Hi '+username);
+                    $('#sp_user_name').text('Hi '+user.name);
                     $('#login_msg').text('');
                     $('#txb_username').val('');
                     $('#txb_password').val('');

@@ -3,7 +3,7 @@ var bubbleDOM = $('<div class="selection_bubble"><div class="inner_bubble"></div
 document.body.appendChild(bubbleDOM);
 
 var wordPanelDOM = $(`
-<div id="div_word" style="visibility: hidden;position:absolute;background-color:white;padding:5px;white;box-shadow: rgba(83,84,86,0.85) 0px 1px 3px;z-index: 2147483647;">
+<div id="div_word" style="display:none;position:absolute;background-color:white;padding:5px;white;box-shadow: rgba(83,84,86,0.85) 0px 1px 3px;z-index: 2147483647;">
     <span id="sp_error" style="font-size:12px;"></span>
     <span id="sp_spell" style="font-size:18px;"></span> <span id="sp_pronounce" style="font-size:12px;"></span>
     <br/>
@@ -19,12 +19,12 @@ bubbleDOM.onclick = function (e) {
     //     bubbleDOM.style.visibility = 'hidden';
     // });
     chrome.runtime.sendMessage({opt: 'search', body: {form: text}}, function (result) {
-        bubbleDOM.style.visibility = 'hidden';
+        bubbleDOM.style.display = 'none';
 
         let response = result.response;
         let user = result.user;
 
-        $('#div_word').css('visibility', 'visible');
+        $('#div_word').css('display', 'block');
         let top = $(bubbleDOM).css('top');
         let left = $(bubbleDOM).css('left');
         $('#div_word').css('top', top);
@@ -107,8 +107,8 @@ document.addEventListener('mouseup', function (e) {
 
 // Close the bubble when we click on the screen.
 document.addEventListener('mousedown', function (e) {
-    bubbleDOM.style.visibility = 'hidden';
-    wordPanelDOM.style.visibility = 'hidden';
+    bubbleDOM.style.display = 'none';
+    wordPanelDOM.style.display = 'none';
 }, false);
 
 
@@ -118,5 +118,5 @@ function renderBubble(mouseX, mouseY, selection) {
     bubbleDOM.setAttribute('sel_text', selection);
     bubbleDOM.style.top = mouseY + 'px';
     bubbleDOM.style.left = mouseX + 'px';
-    bubbleDOM.style.visibility = 'visible';
+    bubbleDOM.style.display = 'block';
 }

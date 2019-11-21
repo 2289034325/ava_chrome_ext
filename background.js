@@ -15,20 +15,13 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
             if(!lang){lang = 1;}
             let form = msg.body.form;
 
-            var api = '';
-            if(lang == 1){
-                api = 'word/search';
-            }
-            else{
-                api = 'word/grab';
-            }
-
+            var api = 'word/search'
             $.ajax({
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
                 type: 'get',
-                url: `${api_host}/dictionary/${api}/?lang=${lang}&&form=${form}`,
+                url: `${api_host}/app/dictionary/${api}/?lang=${lang}&&form=${form}`,
                 complete: function(xhr) {
                     var response = {};
                     response.status = xhr.status;
