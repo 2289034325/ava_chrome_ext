@@ -5,7 +5,7 @@ $(function(){
     if(token) {
         // console.log(jwt_decode);
         const user = parseJwt(token);
-        $('#sp_user_name').text('Hi '+user.username);
+        $('#sp_user_name').text('Hi '+user.name);
         $('#div_settings').css('display','');
         $('#div_login').css('display','none');
 
